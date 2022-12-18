@@ -1,0 +1,69 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+import time
+# Start the Chrome webdriver
+# Start the Chrome webdriver
+
+# Start the Chrome webdriver
+driver = webdriver.Chrome()
+
+# Navigate to the target webpage
+driver.get('https://milesandsmiles.qnbfinansbank.com/kampanyalar')
+
+while True:
+    try:
+        showmores = driver.find_element(By.XPATH, '//*[@id="showMore"]')
+        showmores.click()
+        time.sleep(1)
+    except:
+        break
+
+# Find all of the images on the page
+images = driver.find_elements(By.XPATH, '//*[@id="campaignBody"]/div')
+
+x = 1
+# Loop through each image
+for image in images:
+
+    change = '//*[@id="campaignBody"]/div[' + str(x) + ']/div/a/figcaption'
+    title_element = driver.find_element(By.XPATH, change).text
+    print(title_element)
+    x += 1
+
+    # Check if the image is clickable
+    if image.is_enabled():
+        # Click on the image
+        try:
+            image.click()
+        except Exception as e:
+            # Log the error message and stack trace
+            print("Error occurred while trying to click on the image:")
+            print(e)
+
+        # Wait for the new page to load, then scrape the information you need
+        try:
+            elem = WebDriverWait(driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="aspnetForm"]/main/div/div[2]/div[2]/div/div/div[1]/div/div[1]'))
+            )
+            time.sleep(1)
+
+            # Get the text from the element
+            info = elem.text
+
+            # Print the scraped information
+            print(info + "\n")
+            # Go back to the original page
+            driver.back()
+            time.sleep(1)
+
+
+
+        except Exception as e:
+            # Log the error message and stack trace
+            print("Error occurred while trying to scrape the information from the page:")
+            print(e)
+
+driver.quit()
