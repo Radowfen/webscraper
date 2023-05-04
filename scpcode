@@ -11,7 +11,7 @@ import time
 driver = webdriver.Chrome()
 
 # Navigate to the target webpage
-driver.get('https://milesandsmiles.qnbfinansbank.com/kampanyalar')
+driver.get('html')
 
 while True:
     try:
